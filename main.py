@@ -1,15 +1,26 @@
 import json
+import os
 
 # Загрузка данных из файла
 def load_data():
-    with open('flowers.json', encoding='utf-8') as file:
-        data = json.load(file)
-    return data
+    try:
+        with open('flowers.json', encoding='utf-8') as file:
+            data = json.load(file)
+        return data
+    except FileNotFoundError:
+        print("Ошибка: файл flowers.json не найден.")
+        return None
+    except json.JSONDecodeError:
+        print("Ошибка: файл flowers.json содержит некорректный JSON.")
+        return None
 
 # Сохранение данных в файл
 def save_data(data):
-    with open('flowers.json', 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+    try:
+        with open('flowers.json', 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    except IOError:
+        print("Ошибка при сохранении данных.")
 
 # Вывод информации об одном цветке
 def display_flower(flower):
@@ -23,15 +34,23 @@ def display_flower(flower):
     print()
 
 # Вывод всех записей
-def display_all_flowers(flowers):
-    for flower in flowers:
+def display_all_flowers(data):
+    if not data["flowers"]:
+        print("Нет записей для отображения.")
+        return
+    for flower in data["flowers"]:
         display_flower(flower)
 
 # Вывод цветка по ID
-def display_flower_by_id(flowers):
-    search_id = int(input('Введите ID записи которую хотите вывести: '))
+def display_flower_by_id(data):
+    try:
+        search_id = int(input('Введите ID записи которую хотите вывести: '))
+    except ValueError:
+        print("Ошибка ввода. Нужно ввести число.")
+        return
+    
     found = False
-    for flower in flowers:
+    for flower in data["flowers"]:
         if flower["id"] == search_id:
             display_flower(flower)
             found = True
@@ -42,7 +61,12 @@ def display_flower_by_id(flowers):
 # Добавление нового цветка
 def add_flower(data):
     print('Вы выбрали записать новую запись (новый цветок), вводите данные: ')
-    new_id = int(input("Введите ID: "))
+    
+    try:
+        new_id = int(input("Введите ID: "))
+    except ValueError:
+        print("Ошибка ввода. Нужно ввести число для ID.")
+        return
 
     # Проверка уникальности ID
     for flower in data["flowers"]:
@@ -50,12 +74,23 @@ def add_flower(data):
             print("Ошибка: цветок с таким ID уже существует!")
             return
 
+    name = input("Введите название цветка: ")
+    latin_name = input("Введите латинское название: ")
+    
+    is_red_book = input("Входит ли в Красную книгу? (true/false): ").strip().lower() == "true"
+    
+    try:
+        price = float(input("Введите цену: "))
+    except ValueError:
+        print("Ошибка ввода. Нужно ввести число для цены.")
+        return
+
     new_flower = {
         "id": new_id,
-        "name": input("Введите название цветка: "),
-        "latin_name": input("Введите латинское название: "),
-        "is_red_book_flower": input("Входит ли в Красную книгу? (true/false): ").strip().lower() == "true",
-        "price": float(input("Введите цену: "))
+        "name": name,
+        "latin_name": latin_name,
+        "is_red_book_flower": is_red_book,
+        "price": price
     }
     data["flowers"].append(new_flower)
     save_data(data)
@@ -63,7 +98,12 @@ def add_flower(data):
 
 # Удаление цветка по ID
 def delete_flower_by_id(data):
-    delete_id = int(input("Введите ID записи, которую хотите удалить: "))
+    try:
+        delete_id = int(input("Введите ID записи, которую хотите удалить: "))
+    except ValueError:
+        print("Ошибка ввода. Нужно ввести число.")
+        return
+    
     flowers = data["flowers"]
     found = False
     for i, flower in enumerate(flowers):
@@ -81,7 +121,9 @@ def main():
     print('start code')
     
     data = load_data()
-    flowers = data['flowers']
+    if data is None:
+        return
+    
     count_actions = 0
     
     while True:
@@ -95,18 +137,16 @@ def main():
         
         if action == 1:
             count_actions += 1
-            display_all_flowers(flowers)
+            display_all_flowers(data)
         elif action == 2:
             count_actions += 1
-            display_flower_by_id(flowers)
+            display_flower_by_id(data)
         elif action == 3:
             count_actions += 1
             add_flower(data)
-            flowers = data['flowers']
         elif action == 4:
             count_actions += 1
             delete_flower_by_id(data)
-            flowers = data['flowers']
         elif action == 5:
             print(f'Вы провели {count_actions} операций с записями за время работы программы')
             print('Программа завершена')
@@ -115,4 +155,5 @@ def main():
             print('Ошибка ввода. Попробуйте снова.')
     print('end code')
 
-main()
+if __name__ == "__main__":
+    main()

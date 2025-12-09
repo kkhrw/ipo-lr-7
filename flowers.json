@@ -1,1 +1,32 @@
-[]
+{
+    "flowers": [
+        {
+            "id": 1,
+            "name": "Роза",
+            "latin_name": "Rosa",
+            "is_red_book_flower": false,
+            "price": 50.0
+        },
+        {
+            "id": 2,
+            "name": "Тюльпан",
+            "latin_name": "Tulipa",
+            "is_red_book_flower": false,
+            "price": 30.0
+        },
+        {
+            "id": 3,
+            "name": "Ландыш майский",
+            "latin_name": "Convallaria majalis",
+            "is_red_book_flower": true,
+            "price": 100.0
+        },
+        {
+            "id": 4,
+            "name": "мак",
+            "latin_name": "mac",
+            "is_red_book_flower": true,
+            "price": 67887623456789.0
+        }
+    ]
+}
