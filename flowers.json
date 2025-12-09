@@ -27,6 +27,20 @@
             "latin_name": "mac",
             "is_red_book_flower": true,
             "price": 67887623456789.0
+        },
+        {
+            "id": 5,
+            "name": "цветик-семицветик",
+            "latin_name": "wowsocool",
+            "is_red_book_flower": false,
+            "price": 1.2345678765432457e+19
+        },
+        {
+            "id": 6,
+            "name": "ромашка",
+            "latin_name": "daisy",
+            "is_red_book_flower": false,
+            "price": 1.0
         }
     ]
 }
