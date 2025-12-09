@@ -125,7 +125,7 @@ while True:
     if choice == "1":
         print("\n===== ВСЕ ЗАПИСИ =====") #Выводим меню 1
         for i, item in enumerate(data): #Перебираем элементы файла
-            print(f"[{i}] id: {item[id]}, name: {item['name']}, "
+            print(f"[{i}] id: {item['id']}, name: {item['name']}, "
                   f"latin_name: {item['latin_name']}, "
                   f"is_red_book_flower: {item['is_red_book_flower']}, "
                   f"price: {item['price']}")
